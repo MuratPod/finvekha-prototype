@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="36" viewBox="0 0 168 36" role="img" aria-label="Финвеха">
+  <title>Финвеха</title>
+  <!-- Знак «веха»: столбик-вешка с флажком на основании. Б «Строгий тёмно-синий». -->
+  <rect x="1" y="1" width="34" height="34" rx="7" fill="#2563EB"/>
+  <path d="M13 8v19" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M14.3 8.6 25 12.6l-10.7 4z" fill="#FFFFFF"/>
+  <path d="M8.5 27h14" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" opacity=".75"/>
+  <text x="45" y="25" fill="#FFFFFF" font-family="-apple-system, 'SF Pro Display', Inter, 'Segoe UI', Roboto, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="-0.2">Финвеха</text>
+</svg>

@@ -1,0 +1,234 @@
+/* =========================================================================
+   Финвеха — дизайн-токены v0.2 · направление Б «Строгий тёмно-синий»
+   (выбрано Муратом 28.10.2026). Палитра ТЗ §1.5.
+   Контраст посчитан скриптом design/tools/contrast.py → design/contrast_B.md
+   Темы: системная (prefers-color-scheme) + принудительная [data-theme].
+   Стекло (backdrop-filter) из направления А УБРАНО: все поверхности
+   непрозрачные; --color-glass оставлен только как алиас surface (совместимость).
+   Предыдущая версия: design/tokens_v0.1_backup.css
+   ========================================================================= */
+
+:root {
+  /* ---------- Базовая палитра ТЗ (не использовать напрямую в компонентах) */
+  --palette-navy:   #142B4A;
+  --palette-blue:   #2563EB;
+  --palette-green:  #15803D;
+  --palette-amber:  #D97706;   /* только иконки/полосы/рамки, НЕ текст */
+  --palette-red:    #B91C1C;
+  --palette-bg:     #F3F6FA;
+
+  /* ---------- Типографика (Б: плотнее, базовый 14) */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-numeric: "tnum" 1, "lnum" 1;
+
+  --fs-display: 32px;  --lh-display: 40px;     /* главный KPI в шапке */
+  --fs-kpi: 24px;      --lh-kpi: 30px;         /* KPI шапки */
+  --fs-h1: 20px;       --lh-h1: 28px;          /* заголовок экрана */
+  --fs-h2: 16px;       --lh-h2: 24px;
+  --fs-h3: 12px;       --lh-h3: 16px;          /* заголовок карточки, UPPERCASE, .06em */
+  --fs-body: 14px;     --lh-body: 20px;
+  --fs-table: 13px;    --lh-table: 18px;
+  --fs-small: 13px;    --lh-small: 18px;
+  --fs-caption: 12px;  --lh-caption: 16px;     /* дата/источник — минимум */
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+
+  /* ---------- Отступы (шаг 4; Б: плотная сетка 12) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-7: 28px; --space-8: 32px;
+  --space-10: 40px; --space-12: 48px;
+
+  /* ---------- Сетка */
+  --sidebar-width: 232px;
+  --sidebar-rail: 72px;   /* 768–1279; < 768 — шторка */
+  --drawer-width: 280px;
+  --content-max: 1440px;
+  --grid-columns: 12;
+  --grid-gutter: 12px;
+  --page-padding: 28px;
+  --topbar-height: 60px;
+  --row-height: 36px;          /* строка плотной таблицы */
+
+  /* ---------- Радиусы (Б: сдержанные) */
+  --radius-xs: 4px;   /* бейджи, чипы */
+  --radius-sm: 6px;   /* поля, кнопки */
+  --radius-md: 8px;   /* карточки, KPI-полоса */
+  --radius-lg: 8px;   /* совместимость: карточки */
+  --radius-xl: 12px;  /* модальные окна, боковая панель-шторка */
+  --radius-pill: 999px;
+
+  /* ---------- Движение */
+  --dur-fast: 120ms; --dur-base: 180ms; --dur-slow: 280ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* ---------- Интерактив */
+  --hit-min: 36px;            /* десктоп, плотный режим; 44px для touch */
+  --focus-ring-width: 2px;
+}
+@media (pointer: coarse) { :root { --hit-min: 44px; } }
+
+/* =========================== СВЕТЛАЯ ТЕМА (по умолчанию) ================ */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  /* Поверхности */
+  --color-bg:             #F3F6FA;   /* фон ТЗ, без градиентов */
+  --color-bg-gradient:    none;
+  --color-surface:        #FFFFFF;
+  --color-surface-2:      #F7F9FC;   /* зебра/hover строк, вложенные блоки */
+  --color-surface-sunken: #EAEFF5;   /* поля, трек прогресса, сегменты */
+  --color-glass:          var(--color-surface);   /* стекло убрано */
+  --color-glass-border:   var(--color-divider);
+  --color-overlay:        rgba(20, 43, 74, 0.45);
+  /* Тёмно-синие зоны Б: сайдбар и шапка KPI */
+  --color-sidebar:        #142B4A;
+  --color-sidebar-active: rgba(255,255,255,.10);   /* ≈ #2C405C */
+  --color-band:           #142B4A;
+  --color-band-cell:      rgba(255,255,255,.06);   /* ≈ #223855, ячейка главного KPI */
+  --color-band-line:      rgba(255,255,255,.14);
+  --on-band-text:         #FFFFFF;   /* 14,25 / 11,90 на ячейке */
+  --on-band-text-2:       #C9D6E8;   /* 9,68 / 8,08 */
+  --on-band-text-3:       #A8B6C9;   /* 6,92 / 5,78 — дата, источник */
+  --on-band-positive:     #4ADE80;   /* 8,17 — #15803D на шапке 2,84 ✗ */
+  --on-band-negative:     #FCA5A5;   /* 7,51 — #B91C1C на шапке 2,20 ✗ */
+  --on-band-warning:      #FBBF24;   /* 8,53 — текст «устарело» на шапке */
+  --on-band-accent:       #93C5FD;   /* 7,90 — ссылки/фокус на шапке */
+  --on-band-control-bg:   rgba(255,255,255,.08);
+  --on-band-control-line: rgba(255,255,255,.28);
+
+  /* Текст */
+  --color-text:           #142B4A;   /* 13,14 bg / 14,25 surface */
+  --color-text-secondary: #475569;   /* 6,99 / 7,58 */
+  --color-text-tertiary:  #5B6B80;   /* 5,02 / 5,44 — дата, источник */
+  --color-text-on-accent: #FFFFFF;   /* 5,17 */
+  --color-text-inverse:   #FFFFFF;
+
+  /* Линии (Б: обводки вместо теней) */
+  --color-divider:        #D5DEE9;   /* декоративная, смысл не несёт */
+  --color-border:         #D5DEE9;
+  --color-border-control: #7C8BA1;   /* 3,19 / 3,46 ≥ 3:1 */
+
+  /* Акцент */
+  --color-accent:         #2563EB;   /* 4,77 / 5,17 */
+  --color-accent-strong:  #1D4ED8;   /* hover; 5,49 на тинте */
+  --color-accent-tint:    #DBEAFE;
+  --color-focus:          #2563EB;
+
+  /* Семантика */
+  --color-positive:       #15803D;   /* 4,63 / 5,02 */
+  --color-positive-tint:  #E8F7EE;   /* 4,53 */
+  --color-negative:       #B91C1C;   /* 5,97 / 6,47 */
+  --color-negative-tint:  #FDECEC;   /* 5,66 */
+  --color-warning:        #D97706;   /* ТОЛЬКО иконки/полосы/рамки (3,19 на surface) */
+  --color-warning-text:   #B45309;   /* ТЕКСТ предупреждений 4,63 / 5,02 */
+  --color-warning-tint:   #FEF6E0;   /* warning-text на тинте 4,66 */
+  --color-neutral:        #475569;   /* переводы, обмен */
+
+  /* Прогноз */
+  --color-forecast:       #5B6B80;   /* 5,44 */
+  --color-forecast-tint:  rgba(91,107,128,.08);
+  --forecast-hatch: repeating-linear-gradient(135deg, rgba(91,107,128,.24) 0 2px, transparent 2px 7px);
+  --forecast-dash: 6 4;
+
+  /* Метки прототипа: «Пример» (демо-данные) и «Допущение» (не утверждено) */
+  --color-demo-bg:        #142B4A;   /* белый 14,25 */
+  --color-demo-text:      #FFFFFF;
+  --color-demo-outline:   #142B4A;
+  --color-assume-text:    #6D28D9;   /* 6,25 на тинте; служебный цвет прототипа, не продукта */
+  --color-assume-tint:    #F3EEFF;
+  --color-assume-border:  #6D28D9;
+  --on-band-assume-bg:    #EDE9FE;   /* #4C1D95 на нём 9,23 */
+  --on-band-assume-text:  #4C1D95;
+
+  /* Графики */
+  --chart-1: #142B4A;  --chart-2: #2563EB;  --chart-3: #15803D;
+  --chart-4: #7C8BA1;  --chart-5: #D97706;
+  --chart-grid: #E4EAF2;
+
+  /* Тени — только для всплывающих слоёв */
+  --shadow-sm: none;
+  --shadow-md: 0 1px 2px rgba(20,43,74,.06);
+  --shadow-lg: 0 12px 32px rgba(20,43,74,.18), 0 2px 6px rgba(20,43,74,.08);
+  --shadow-glass: none;
+}
+
+/* =========================== ТЁМНАЯ ТЕМА ================================ */
+/* Значения продублированы: системная тема и принудительная [data-theme=dark] */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg:#0B1524; --color-surface:#13233A; --color-surface-2:#1A2D47; --color-surface-sunken:#0E1A2C;
+    --color-overlay:rgba(0,0,0,.6);
+    --color-sidebar:#0E1D33; --color-sidebar-active:rgba(255,255,255,.10);
+    --color-band:#12284A; --color-band-cell:rgba(255,255,255,.06); --color-band-line:rgba(255,255,255,.14);
+    --color-text:#E6EDF6; --color-text-secondary:#A8B6C9; --color-text-tertiary:#93A3B8;
+    --color-text-on-accent:#0B1524; --color-text-inverse:#0B1524;
+    --color-divider:#26395A; --color-border:#26395A; --color-border-control:#6B7F9E;
+    --color-accent:#60A5FA; --color-accent-strong:#93C5FD; --color-accent-tint:#12305C; --color-focus:#93C5FD;
+    --color-positive:#4ADE80; --color-positive-tint:#0F3320;
+    --color-negative:#F87171; --color-negative-tint:#3B1518;
+    --color-warning:#F59E0B; --color-warning-text:#FCD34D; --color-warning-tint:#3A2A0A;
+    --color-neutral:#A8B6C9;
+    --color-forecast:#94A3B8; --color-forecast-tint:rgba(148,163,184,.10);
+    --forecast-hatch: repeating-linear-gradient(135deg, rgba(148,163,184,.30) 0 2px, transparent 2px 7px);
+    --color-demo-bg:#E6EDF6; --color-demo-text:#0B1524; --color-demo-outline:#A8B6C9;
+    --color-assume-text:#C4B5FD; --color-assume-tint:#261C45; --color-assume-border:#A78BFA;
+    --chart-1:#C7D4E5; --chart-2:#60A5FA; --chart-3:#4ADE80; --chart-4:#6B7F9E; --chart-5:#F59E0B; --chart-grid:#22385A;
+    --shadow-md:none; --shadow-lg:0 12px 32px rgba(0,0,0,.55);
+  }
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg:#0B1524;               /* text 15,53 */
+  --color-surface:#13233A;          /* text 13,40 · text-3 6,15 */
+  --color-surface-2:#1A2D47;        /* text-3 5,41 · negative 5,03 */
+  --color-surface-sunken:#0E1A2C;
+  --color-overlay:rgba(0,0,0,.6);
+  --color-sidebar:#0E1D33; --color-sidebar-active:rgba(255,255,255,.10);
+  --color-band:#12284A;             /* шапка KPI: белый 14,70 */
+  --color-band-cell:rgba(255,255,255,.06); --color-band-line:rgba(255,255,255,.14);
+  --color-text:#E6EDF6; --color-text-secondary:#A8B6C9; --color-text-tertiary:#93A3B8;
+  --color-text-on-accent:#0B1524;   /* 7,20 на #60A5FA */
+  --color-text-inverse:#0B1524;
+  --color-divider:#26395A; --color-border:#26395A; --color-border-control:#6B7F9E; /* 3,88 */
+  --color-accent:#60A5FA;           /* 7,20 / 6,21 */
+  --color-accent-strong:#93C5FD; --color-accent-tint:#12305C; --color-focus:#93C5FD;
+  --color-positive:#4ADE80; --color-positive-tint:#0F3320;
+  --color-negative:#F87171; --color-negative-tint:#3B1518;
+  --color-warning:#F59E0B;          /* графика 7,36 */
+  --color-warning-text:#FCD34D;     /* светлый янтарный, текст 10,96 на surface */
+  --color-warning-tint:#3A2A0A;     /* 9,61 */
+  --color-neutral:#A8B6C9;
+  --color-forecast:#94A3B8; --color-forecast-tint:rgba(148,163,184,.10);
+  --forecast-hatch: repeating-linear-gradient(135deg, rgba(148,163,184,.30) 0 2px, transparent 2px 7px);
+  --color-demo-bg:#E6EDF6; --color-demo-text:#0B1524; --color-demo-outline:#A8B6C9; /* 15,53 */
+  --color-assume-text:#C4B5FD; --color-assume-tint:#261C45; --color-assume-border:#A78BFA; /* 8,52 */
+  --chart-1:#C7D4E5; --chart-2:#60A5FA; --chart-3:#4ADE80; --chart-4:#6B7F9E; --chart-5:#F59E0B; --chart-grid:#22385A;
+  --shadow-md:none; --shadow-lg:0 12px 32px rgba(0,0,0,.55);
+}
+
+/* =========================== ДОСТУПНОСТЬ ================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+}
+@media (prefers-contrast: more) {
+  :root { --color-divider: var(--color-border-control); }
+}
+
+/* =========================== БАЗОВЫЕ УТИЛИТЫ ============================ */
+.num { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: var(--font-numeric); white-space: nowrap; }
+/* .glass оставлен для совместимости со старыми образцами: теперь сплошная поверхность */
+.glass { background: var(--color-surface); border: 1px solid var(--color-divider); }
+.is-forecast { background-image: var(--forecast-hatch); }
+.badge-demo {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: var(--radius-xs);
+  background: var(--color-demo-bg); color: var(--color-demo-text);
+  font: var(--fw-semibold) 11px/16px var(--font-sans); letter-spacing: .04em; text-transform: uppercase;
+}
+.badge-assume {
+  display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border-radius: var(--radius-xs);
+  background: var(--color-assume-tint); color: var(--color-assume-text); border: 1px dotted var(--color-assume-border);
+  font: var(--fw-semibold) 11px/16px var(--font-sans);
+}
+:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus); outline-offset: 2px; }
